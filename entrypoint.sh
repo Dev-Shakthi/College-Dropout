@@ -22,7 +22,7 @@ fi
 
 #Start FastAPI in background
 echo "Starting FastAPI file manager on port 8000..."
-exec uvicorn file_manager:app --host 0.0.0.0 --port 8000
+uvicorn file_manager:app --host 0.0.0.0 --port 8000
 
 #Start Streamlit app
 echo "Starting Streamlit app on port 8501..."
