@@ -5,6 +5,11 @@ import os
 app = FastAPI()
 APP_DIR = os.getcwd()
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for nginx"""
+    return {"status": "healthy"}
+    
 @app.get("/read")
 async def read_file(page: str):
     try:
