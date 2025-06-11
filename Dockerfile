@@ -4,25 +4,40 @@ FROM python:3-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV APP_HOME=/app
+
 WORKDIR $APP_HOME
 
-# Install system dependencies for downloading/unzipping
-RUN apt-get update && apt-get install -y wget unzip && rm -rf /var/lib/apt/lists/*
+# Install system dependencies including nginx and supervisor
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    nginx \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Python requirements
 COPY requirements.txt .
 RUN python -m pip install --no-cache-dir --root-user-action=ignore -r requirements.txt
 
+# Copy configuration files
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Add the custom entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Create non-root user
+# Create non-root user and set permissions
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && \
-    chown -R appuser $APP_HOME
+    chown -R appuser $APP_HOME && \
+    mkdir -p /var/log/supervisor && \
+    chown -R appuser /var/log/supervisor && \
+    chown -R appuser /var/log/nginx && \
+    chown -R appuser /var/run
+
 USER appuser
 
-EXPOSE 8000
-EXPOSE 8501
+# Expose only port 80 for nginx
+EXPOSE 80
 
 ENTRYPOINT ["/entrypoint.sh"]
