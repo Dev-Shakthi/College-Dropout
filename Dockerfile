@@ -22,6 +22,7 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && \
     chown -R appuser $APP_HOME
 USER appuser
 
+EXPOSE 8000
 EXPOSE 8501
 
 ENTRYPOINT ["/entrypoint.sh"]
