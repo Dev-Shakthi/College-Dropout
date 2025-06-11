@@ -1,12 +1,8 @@
-#!/bin/bash
-
-set -e  # Exit on any error
+set -e
 
 if [ ! -z "$APP_ZIP_URL" ]; then
   echo "Downloading app from $APP_ZIP_URL"
   wget -O /app/app.zip "$APP_ZIP_URL"
-
-  echo "Unzipping downloaded app..."
   unzip -o /app/app.zip -d /app/
 
   # If the app is nested inside a folder (e.g., 'College Dropout'), move files up
@@ -19,10 +15,14 @@ fi
 
 # Check if app.py exists
 if [ ! -f /app/app.py ]; then
-  echo "❌ Error: /app/app.py not found. Exiting."
+  echo "Error: /app/app.py not found. Exiting."
   exit 1
 fi
 
-# Start the Streamlit app
-echo "✅ Starting Streamlit app..."
+#Start FastAPI in background
+echo "Starting FastAPI file manager on port 8000..."
+uvicorn file_manager:app --host 0.0.0.0 --port 8000 &
+
+#Start Streamlit app
+echo "Starting Streamlit app on port 8501..."
 exec streamlit run /app/app.py --server.address=0.0.0.0 --server.port=8501
