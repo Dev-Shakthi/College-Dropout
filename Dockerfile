@@ -37,6 +37,6 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && \
 USER appuser
 
 # Expose ports for nginx, streamlit, fastapi
-EXPOSE 80 8501 8000
+EXPOSE 80
 
 ENTRYPOINT ["/entrypoint.sh"]
