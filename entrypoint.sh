@@ -24,6 +24,12 @@ if [ ! -f /app/file_manager.py ]; then
 fi
 
 mkdir -p /var/log/nginx /var/run /var/log/supervisor
+echo "Testing nginx configuration..."
+nginx -t -c /app/nginx.conf
+if [ $? -ne 0 ]; then
+    echo "Nginx config test failed!"
+    exit 1
+fi
 
 echo "Starting supervisor..."
 exec supervisord -c /etc/supervisor/conf.d/supervisord.conf
