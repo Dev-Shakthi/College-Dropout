@@ -23,5 +23,7 @@ if [ ! -f /app/file_manager.py ]; then
     exit 1
 fi
 
+mkdir -p /var/log/nginx /var/run /var/log/supervisor
+
 echo "Starting supervisor..."
 exec supervisord -c /etc/supervisor/conf.d/supervisord.conf
