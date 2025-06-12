@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python requirements
-COPY requirements.txt .
+COPY requirements.txt . 
 RUN python -m pip install --no-cache-dir --root-user-action=ignore -r requirements.txt
 
 # Copy configuration files
@@ -32,12 +32,11 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && \
     chown -R appuser $APP_HOME && \
     mkdir -p /var/log/supervisor && \
     chown -R appuser /var/log/supervisor && \
-    chown -R appuser /var/log/nginx && \
-    chown -R appuser /var/run
+    chown -R appuser /var/log/nginx
 
 USER appuser
 
-# Expose only port 80 for nginx
-EXPOSE 80
+# Expose ports for nginx, streamlit, fastapi
+EXPOSE 80 8501 8000
 
 ENTRYPOINT ["/entrypoint.sh"]
