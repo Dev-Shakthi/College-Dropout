@@ -31,12 +31,12 @@ RUN chmod +x /entrypoint.sh
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && \
     chown -R appuser $APP_HOME && \
     mkdir -p /var/log/supervisor && \
-    chown -R appuser /var/log/supervisor && \
-    chown -R appuser /var/log/nginx
+    chmod 755 /var/log/supervisor && \
+    touch /var/run/supervisord.pid && \
+    chmod 666 /var/run/supervisord.pid
 
 USER appuser
 
-# Expose ports for nginx, streamlit, fastapi
-EXPOSE 80
+EXPOSE 80 
 
 ENTRYPOINT ["/entrypoint.sh"]
