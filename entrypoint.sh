@@ -11,12 +11,11 @@ if [ ! -z "$APP_ZIP_URL" ]; then
     rm -f /app/app.zip
 fi
 
-# Skip nginx entirely for now - just run FastAPI and Streamlit directly
-echo "Starting FastAPI..."
-uvicorn file_manager:app --host 0.0.0.0 --port 80 &
+echo "Starting Streamlit on port 80..."  
+streamlit run app.py --server.address=0.0.0.0 --server.port=80 &
 
-echo "Starting Streamlit..."  
-streamlit run app.py --server.address=0.0.0.0 --server.port=8501 &
+echo "Starting FastAPI on port 8000..."
+uvicorn file_manager:app --host 0.0.0.0 --port 8000 &
 
 # Keep container alive
 wait
