@@ -31,9 +31,8 @@ RUN chmod +x /entrypoint.sh
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && \
     chown -R appuser $APP_HOME && \
     mkdir -p /var/log/supervisor && \
-    chmod 755 /var/log/supervisor && \
-    touch /var/run/supervisord.pid && \
-    chmod 666 /var/run/supervisord.pid
+    chown -R appuser /var/log/supervisor && \
+    chown -R appuser /var/log/nginx
 
 USER appuser
 
