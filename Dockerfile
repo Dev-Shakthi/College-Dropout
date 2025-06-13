@@ -29,10 +29,7 @@ RUN chmod +x /entrypoint.sh
 
 # Create non-root user and set permissions
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && \
-    chown -R appuser $APP_HOME && \
-    mkdir -p /var/log/supervisor && \
-    chown -R appuser /var/log/supervisor && \
-    chown -R appuser /var/log/nginx
+    chown -R appuser $APP_HOME
 
 USER appuser
 
